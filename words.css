@@ -1,0 +1,87 @@
+html, body {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	background: black;
+}
+
+.board {
+	margin: 20px;
+	width: 529px;
+	border-radius: 6px;
+	height: 529px;
+	background: #d89c69;
+}
+
+.square {
+	box-shadow: 1px 3px 5px black;
+	background: #d89c69;
+	width: 44px;
+	height: 40px;
+	margin: 2px;
+	border-radius: 4px;
+	font-size: 24px;
+	color: white;
+	float: left;
+	text-align: center;
+	padding-top: 4px;
+	cursor: pointer;
+	position: relative;
+	text-shadow: 0px -1px 2px black;
+}
+
+.square.star {
+	box-shadow: none;
+	content: "★";
+}
+
+.board .square {
+	box-shadow: 0px 0px 1px black;
+}
+
+.square.played {
+	box-shadow: 2px 4px 5px black, 0 -1px 1px black;
+}
+
+.tray {
+	background: rgb(240,183,161); /* Old browsers */
+	background: -moz-linear-gradient(top, rgba(240,183,161,1) 0%, rgba(140,51,16,1) 50%, rgba(117,34,1,1) 51%, rgba(191,110,78,1) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(240,183,161,1)), color-stop(50%,rgba(140,51,16,1)), color-stop(51%,rgba(117,34,1,1)), color-stop(100%,rgba(191,110,78,1))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, rgba(240,183,161,1) 0%,rgba(140,51,16,1) 50%,rgba(117,34,1,1) 51%,rgba(191,110,78,1) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, rgba(240,183,161,1) 0%,rgba(140,51,16,1) 50%,rgba(117,34,1,1) 51%,rgba(191,110,78,1) 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, rgba(240,183,161,1) 0%,rgba(140,51,16,1) 50%,rgba(117,34,1,1) 51%,rgba(191,110,78,1) 100%); /* IE10+ */
+	background: linear-gradient(top, rgba(240,183,161,1) 0%,rgba(140,51,16,1) 50%,rgba(117,34,1,1) 51%,rgba(191,110,78,1) 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f0b7a1', endColorstr='#bf6e4e',GradientType=0 ); /* IE6-9 */
+	width: 337px;
+	height: 50px;
+	margin-left: 115px;
+	border-radius: 4px;
+}
+
+.tray:nth-of-type(odd) {
+	-webkit-transform: rotate(-90deg) translate(300px, 350px);
+	transform: rotate(-90deg) translate(300px, 350px);
+}
+
+.number {
+	position: absolute;
+	right: 5px;
+	bottom: 3px;
+	font-size: 8px;
+	color: black;
+	text-shadow: 1px 1px 1px #ccc;
+}
+
+.square.active {
+	box-shadow: 1px 3px 5px black, 1px 3px 5px white;
+	text-shadow: 1px 1px 1px 0;
+}
+
+.buttons {
+	width: 100px;
+	position: absolute;
+	top: 600px;
+	left: 500px;
+}
