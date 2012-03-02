@@ -1,12 +1,10 @@
-Words Vs. Zombies
-By Jamund Ferguson
-http://www.jamund.com/words/
-
-DESCRIPTION:
+# Words Vs. Zombies
 
 Words with Friends meets Plants vs. Zombies.
 
-TODO: 
+http://www.jamund.com/words/
+
+## TODO
 
 - Move to Backbone.js view models
 - Allow multiple players to play a game from one computer
