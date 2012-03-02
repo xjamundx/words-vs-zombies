@@ -43,6 +43,7 @@ var $board = $(".board")
 var $trays = $(".trays")
 var letters = []
 var $current
+var current
 var $currentTray
 var game = {
 	player: 0
