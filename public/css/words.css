@@ -49,11 +49,7 @@ body {
 	background: rgb(240,183,161); /* Old browsers */
 	background: -moz-linear-gradient(top, rgba(240,183,161,1) 0%, rgba(140,51,16,1) 50%, rgba(117,34,1,1) 51%, rgba(191,110,78,1) 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(240,183,161,1)), color-stop(50%,rgba(140,51,16,1)), color-stop(51%,rgba(117,34,1,1)), color-stop(100%,rgba(191,110,78,1))); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top, rgba(240,183,161,1) 0%,rgba(140,51,16,1) 50%,rgba(117,34,1,1) 51%,rgba(191,110,78,1) 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top, rgba(240,183,161,1) 0%,rgba(140,51,16,1) 50%,rgba(117,34,1,1) 51%,rgba(191,110,78,1) 100%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(top, rgba(240,183,161,1) 0%,rgba(140,51,16,1) 50%,rgba(117,34,1,1) 51%,rgba(191,110,78,1) 100%); /* IE10+ */
 	background: linear-gradient(top, rgba(240,183,161,1) 0%,rgba(140,51,16,1) 50%,rgba(117,34,1,1) 51%,rgba(191,110,78,1) 100%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f0b7a1', endColorstr='#bf6e4e',GradientType=0 ); /* IE6-9 */
 	width: 337px;
 	height: 50px;
 	margin-left: 115px;
@@ -74,7 +70,7 @@ body {
 	text-shadow: 1px 1px 1px #ccc;
 }
 
-.square.active {
+.square.active { 
 	box-shadow: 1px 3px 5px black, 1px 3px 5px white;
 	text-shadow: 1px 1px 1px 0;
 }
@@ -84,4 +80,15 @@ body {
 	position: absolute;
 	top: 600px;
 	left: 500px;
+}
+
+.bag {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 200px;
+}
+
+.active {
+	box-shadow: 1px 1px 1px #fff6a3;
 }

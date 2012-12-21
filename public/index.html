@@ -1,24 +1,33 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" ng-app="Words">
 	<head>
 		<meta charset="UTF-8">
 		<title>Words Vs. Zombies</title>
-		<link rel="stylesheet" href="css/words.css">
+		<link rel="stylesheet" href="/css/words.css">
 	</head>
 	<body>
-		<div class="board">
-
+		<div ng-controller="BoardCtrl">
+			<div class="board">
+				<tile ng-repeat="tile in tiles" ng-click="place(tile)" />
+			</div>
+			<div class="trays">
+				<div class="tray" ng-repeat="tray in trays">
+					<tile ng-repeat="tile in tray.tiles" ng-click="select(tray.tiles, tile)" ng-class="{active:tile.selected}" />
+				</div>
+			</div>
+			<div class="bag">
+				<tile ng-repeat="tile in letters" ng-click="place(tile)" />
+			</div>
+			<div class="buttons">
+				<button class="play" ng-click="distribute()">Play</button>
+				<button class="recall">Re-call</button>
+				<button class="shuffle" ng-click="shuffle()">Shuffle</button>
+				<div ng-repeat="tray in trays">
+					<button ng-click="refill(tray)">Refill Tray {{$index + 1}}</button>
+				</div>
+			</div>
 		</div>
-		<div class="trays">
-		</div>
-		<div class="buttons">
-			<button class="play">Play</button>
-			<button class="recall">Re-call</button>
-			<button class="shuffle">Shuffle</button>
-		</div>
-		<script src="js/jquery.min.js"></script>
-    <script src="js/underscore.min.js"></script>
-    <script src="js/backbone.min.js"></script>
-		<script src="js/words.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js"></script>
+		<script src="/js/board.js"></script>
 	</body>
 </html>
