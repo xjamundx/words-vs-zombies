@@ -5,13 +5,21 @@ angular.module("Words", []).
       replace: true,
       template: '<div class="square"><span class="letter">{{tile.letter}}</span><span class="number">{{tile.number}}</span></div>'
     }
+  }).
+  directive('tray', function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      template: '<div class="tray">' +
+				'	<tile ng-repeat="tile in tray.tiles" ng-click="select(tile)" />' +
+				'</div>'	  
+	}
 });
   
 function BoardCtrl($scope) {
 
 	'use strict';
 	
-	var selected = null;
 	var WIDTH = 11;
 	var HEIGHT = 11;
 	var NUM_TILES = WIDTH * HEIGHT;
@@ -50,6 +58,9 @@ function BoardCtrl($scope) {
 	$scope.tiles = getTiles();	
 	$scope.letters = getLetters();
 	$scope.trays = [{tiles:[]}, {tiles:[]}];
+	$scope.selected = [];
+	$scope.activeTray = null;
+	$scope.activeIndex = 0;
 
 	// actions
 	$scope.pickLetter = function() {
@@ -73,15 +84,25 @@ function BoardCtrl($scope) {
 	
 	$scope.place = function(tile) {
 		if (!tile) return;
- 		tile = {letter: selected.letter, number: selected.number};
+		var sel = $scope.selected[0];
+		// some sort of _.extend would be better
+ 		tile.letter = sel.letter;
+ 		tile.number = sel.number;
+ 		$scope.selected[0] =  null; // remove selected tile
+ 		$scope.activeTray.tiles.splice($scope.activeIndex, 1); // remove from tray
 	};
 	
-	$scope.select = function(tiles, tile) {
-		tiles.forEach(function(t) {
+	$scope.select = function(tile) {
+		var wasSelected = tile.selected;
+		$scope.activeTray = this.$parent.tray;
+		$scope.activeIndex = this.$index;
+		this.$parent.tiles.forEach(function(t) {
 			t.selected = false;
 		});
-		tile.selected = !tile.selected;
-		selected = tile.selected ? tile : null;
+		tile.selected = !wasSelected;
+		$scope.selected[0] = tile.selected ? tile : null;
+		console.log(this.$parent);
+		console.log(this);
 	};
 	
 	$scope.distribute = function() {

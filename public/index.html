@@ -11,12 +11,13 @@
 				<tile ng-repeat="tile in tiles" ng-click="place(tile)" />
 			</div>
 			<div class="trays">
-				<div class="tray" ng-repeat="tray in trays">
-					<tile ng-repeat="tile in tray.tiles" ng-click="select(tray.tiles, tile)" ng-class="{active:tile.selected}" />
-				</div>
+				<tray ng-repeat="tray in trays" />
 			</div>
 			<div class="bag">
-				<tile ng-repeat="tile in letters" ng-click="place(tile)" />
+				<tile ng-repeat="tile in letters" />
+			</div>
+			<div>
+				<tile ng-repeat="tile in selected" ng-show="selected[0]" />
 			</div>
 			<div class="buttons">
 				<button class="play" ng-click="distribute()">Play</button>
