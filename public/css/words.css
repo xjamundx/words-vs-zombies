@@ -5,6 +5,7 @@ html, body {
 
 body {
 	background: black;
+	color: white;
 }
 
 .board {
@@ -92,3 +93,9 @@ body {
 .active {
 	box-shadow: 1px 1px 1px #fff6a3;
 }
+
+.alert {
+	font-weight: bold;
+}
+
+.a { position: absolute; }

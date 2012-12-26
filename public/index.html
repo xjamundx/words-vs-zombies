@@ -20,13 +20,15 @@
 				<tile ng-repeat="tile in selected" ng-show="selected[0]" />
 			</div>
 			<div class="buttons">
-				<button class="play" ng-click="distribute()">Play</button>
-				<button class="recall">Re-call</button>
-				<button class="shuffle" ng-click="shuffle()">Shuffle</button>
+				<button ng-click="startGame()">Play</button>
+				<button ng-click="next()">Next Player</button>
+				<button ng-click="endGame()">End</button>
+				<button ng-click="shuffle()">Shuffle</button>
 				<div ng-repeat="tray in trays">
 					<button ng-click="refill(tray)">Refill Tray {{$index + 1}}</button>
 				</div>
 			</div>
+			<p class="alert" ng-show="isRunning">Player {{player}}'s turn.</div>
 		</div>
 		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js"></script>
 		<script src="/js/board.js"></script>

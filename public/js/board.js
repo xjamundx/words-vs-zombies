@@ -10,7 +10,7 @@ angular.module("Words", []).
     return {
       restrict: 'E',
       replace: true,
-      template: '<div class="tray">' +
+      template: '<div class="tray"><h1 class="a">Player {{$index + 1}}</h1>' +
 				'	<tile ng-repeat="tile in tray.tiles" ng-click="select(tile)" />' +
 				'</div>'	  
 	}
@@ -61,7 +61,10 @@ function BoardCtrl($scope) {
 	$scope.selected = [];
 	$scope.activeTray = null;
 	$scope.activeIndex = 0;
-
+	$scope.isRunning = false;
+	$scope.player = 1;
+	$scope.numPlayers = 2;
+	
 	// actions
 	$scope.pickLetter = function() {
 		$scope.setTile(1, 1, $scope.letters[$scope.letters.length - 1]);
@@ -82,6 +85,15 @@ function BoardCtrl($scope) {
 		$scope.letters.sort(randomish);
 	};
 	
+	$scope.endGame = function() {
+		$scope.isRunning = false;
+	}
+	
+	$scope.next = function() {
+		$scope.player++;
+		if ($scope.player > $scope.numPlayers) $scope.player = 1;
+	}
+	
 	$scope.place = function(tile) {
 		if (!tile) return;
 		var sel = $scope.selected[0];
@@ -101,15 +113,13 @@ function BoardCtrl($scope) {
 		});
 		tile.selected = !wasSelected;
 		$scope.selected[0] = tile.selected ? tile : null;
-		console.log(this.$parent);
-		console.log(this);
 	};
 	
-	$scope.distribute = function() {
-		$scope.letters.forEach(function(letter, i) {
-			$scope.tiles[i] = $scope.letters.pop();
+	$scope.startGame = function() {
+		$scope.isRunning = true;
+		$scope.trays.forEach(function(tray, i) {
+			$scope.refill(tray);
 		});
-		$scope.shuffle();
 	};
 	
 	function getYourTiles(num) {
