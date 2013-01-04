@@ -39,15 +39,27 @@ body {
 }
 
 .board .square {
-	box-shadow: 0px 0px 1px black;
+   box-shadow: 0px 0px 1px black;
 }
 
 .square.played {
 	box-shadow: 2px 4px 5px black, 0 -1px 1px black;
 }
 
+.square.active { 
+	box-shadow: 1px 3px 5px black, 1px 3px 5px white;
+	text-shadow: 1px 1px 1px 0;
+}
+
+.square.active {
+	box-shadow: 1px 1px 1px #fff6a3;
+}
+
+.square.selected {
+	box-shadow: 1px 3px 5px black, 0 0 12px 2px black;
+}
+
 .tray {
-	background: rgb(240,183,161); /* Old browsers */
 	background: -moz-linear-gradient(top, rgba(240,183,161,1) 0%, rgba(140,51,16,1) 50%, rgba(117,34,1,1) 51%, rgba(191,110,78,1) 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(240,183,161,1)), color-stop(50%,rgba(140,51,16,1)), color-stop(51%,rgba(117,34,1,1)), color-stop(100%,rgba(191,110,78,1))); /* Chrome,Safari4+ */
 	background: linear-gradient(top, rgba(240,183,161,1) 0%,rgba(140,51,16,1) 50%,rgba(117,34,1,1) 51%,rgba(191,110,78,1) 100%); /* W3C */
@@ -55,11 +67,11 @@ body {
 	height: 50px;
 	margin-left: 115px;
 	border-radius: 4px;
+	margin-top: 50px;
 }
 
-.tray:nth-of-type(odd) {
-	-webkit-transform: rotate(-90deg) translate(300px, 350px);
-	transform: rotate(-90deg) translate(300px, 350px);
+.tray.active {
+	box-shadow: 0 0 0 10px white;
 }
 
 .number {
@@ -69,11 +81,6 @@ body {
 	font-size: 8px;
 	color: black;
 	text-shadow: 1px 1px 1px #ccc;
-}
-
-.square.active { 
-	box-shadow: 1px 3px 5px black, 1px 3px 5px white;
-	text-shadow: 1px 1px 1px 0;
 }
 
 .buttons {
@@ -90,12 +97,10 @@ body {
     width: 200px;
 }
 
-.active {
-	box-shadow: 1px 1px 1px #fff6a3;
-}
-
 .alert {
 	font-weight: bold;
 }
 
-.a { position: absolute; }
+.a {
+	position: absolute;
+}

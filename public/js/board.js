@@ -1,18 +1,16 @@
-angular.module("Words", []).
+angular.module('Words', []).
   directive('tile', function() {
     return {
       restrict: 'E',
       replace: true,
-      template: '<div class="square"><span class="letter">{{tile.letter}}</span><span class="number">{{tile.number}}</span></div>'
+      templateUrl: '/templates/square.html'
     }
   }).
   directive('tray', function() {
     return {
       restrict: 'E',
       replace: true,
-      template: '<div class="tray"><h1 class="a">Player {{$index + 1}}</h1>' +
-				'	<tile ng-repeat="tile in tray.tiles" ng-click="select(tile)" />' +
-				'</div>'	  
+      templateUrl: '/templates/tray.html'
 	}
 });
   
@@ -51,7 +49,7 @@ function BoardCtrl($scope) {
 		, x: {points: 1, count: 1}
 		, y: {points: 1, count: 3}
 		, z: {points: 1, count: 1}
-	    , "☠": {points: 100, count: 1}
+	    , '☠': {points: 100, count: 1}
 	}
 	
 	// model
@@ -90,16 +88,19 @@ function BoardCtrl($scope) {
 	}
 	
 	$scope.next = function() {
+		$scope.trays[$scope.player - 1].status = '';
 		$scope.player++;
 		if ($scope.player > $scope.numPlayers) $scope.player = 1;
+		$scope.trays[$scope.player - 1].status = 'active';
 	}
 	
 	$scope.place = function(tile) {
 		if (!tile) return;
+		if (tile.status === 'played') return;
 		var sel = $scope.selected[0];
-		// some sort of _.extend would be better
  		tile.letter = sel.letter;
  		tile.number = sel.number;
+ 		tile.status = 'played';
  		$scope.selected[0] =  null; // remove selected tile
  		$scope.activeTray.tiles.splice($scope.activeIndex, 1); // remove from tray
 	};
@@ -112,18 +113,20 @@ function BoardCtrl($scope) {
 			t.selected = false;
 		});
 		tile.selected = !wasSelected;
+		tile.status = tile.selected ? 'selected' : '';
 		$scope.selected[0] = tile.selected ? tile : null;
 	};
 	
 	$scope.startGame = function() {
 		$scope.isRunning = true;
+		$scope.trays[0].status = 'active';
 		$scope.trays.forEach(function(tray, i) {
 			$scope.refill(tray);
 		});
 	};
 	
 	function getYourTiles(num) {
-		num =  typeof num !== "undefined" ? num : TILES_PER_TRAY;
+		num =  typeof num !== 'undefined' ? num : TILES_PER_TRAY;
 		var tiles = [];
 		var letter;
 		for (var i = 0; i < num; i++) {
@@ -154,7 +157,7 @@ function BoardCtrl($scope) {
 		for (var i = 0; i < NUM_TILES; i++) {
 			tiles[i] = {};
 		}
-		tiles.splice(middle, 1, {letter: "☆"});
+		tiles.splice(middle, 1, {letter: '☆'});
 		return tiles;
 	}
 	

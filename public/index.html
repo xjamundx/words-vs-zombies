@@ -10,6 +10,8 @@
 			<div class="board">
 				<tile ng-repeat="tile in tiles" ng-click="place(tile)" />
 			</div>
+			<p class="alert" ng-hide="isRunning">Press "Play" to start</p>
+			<p class="alert" ng-show="isRunning">Player {{player}}'s turn.</p>
 			<div class="trays">
 				<tray ng-repeat="tray in trays" />
 			</div>
@@ -28,7 +30,6 @@
 					<button ng-click="refill(tray)">Refill Tray {{$index + 1}}</button>
 				</div>
 			</div>
-			<p class="alert" ng-show="isRunning">Player {{player}}'s turn.</div>
 		</div>
 		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js"></script>
 		<script src="/js/board.js"></script>
