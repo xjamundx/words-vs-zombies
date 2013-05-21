@@ -6,32 +6,36 @@
 		<link rel="stylesheet" href="/css/words.css">
 	</head>
 	<body>
-		<div ng-controller="BoardCtrl">
-			<div class="board">
+		<div ng-controller="GameCtrl">
+			<div class="board" ng-controller="BoardCtrl">
 				<tile ng-repeat="tile in tiles" ng-click="place(tile)" />
 			</div>
-			<p class="alert" ng-hide="isRunning">Press "Play" to start</p>
-			<p class="alert" ng-show="isRunning">Player {{player}}'s turn.</p>
-			<div class="trays">
-				<tray ng-repeat="tray in trays" />
+			<p class="alert" ng-hide="game.isRunning">Press "Play" to start</p>
+			<p class="alert" ng-show="game.isRunning">Player {{game.player}}'s turn.</p>
+			<div class="trays" ng-controller="TraysCtrl">
+				<div ng-repeat="tray in trays">
+						<button ng-click="refill(tray)">Refill Tray {{$index}}</button>
+				</div>
+				<tray ng-repeat="tray in trays" ng-click="fill($index)" />
 			</div>
-			<div class="bag">
+			<div class="bag" ng-controller="BagCtrl">
+				<div>
+					<button ng-click="shuffle()">Shuffle</button>
+					{{letters.length}}
+				</div>
 				<tile ng-repeat="tile in letters" />
 			</div>
 			<div>
 				<tile ng-repeat="tile in selected" ng-show="selected[0]" />
 			</div>
-			<div class="buttons">
-				<button ng-click="startGame()">Play</button>
+			<div class="buttons" ng-controller="TraysCtrl">
+				<button ng-click="play();">Play</button>
 				<button ng-click="next()">Next Player</button>
-				<button ng-click="endGame()">End</button>
+				<button ng-click="end()">End</button>
 				<button ng-click="shuffle()">Shuffle</button>
-				<div ng-repeat="tray in trays">
-					<button ng-click="refill(tray)">Refill Tray {{$index + 1}}</button>
-				</div>
 			</div>
 		</div>
-		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js"></script>
+		<script src="/js/angular.js"></script>
 		<script src="/js/board.js"></script>
 	</body>
 </html>

@@ -1,3 +1,3 @@
-<div class="tray" ng-class="tray.status">
-	<tile ng-repeat="tile in tray.tiles" ng-click="select(tile)" />
+<div class="tray" ng-class="{active: game.isRunning&&$index==game.player-1}">
+  <tile ng-repeat="tile in tray.tiles" ng-click="select(tile)" />
 </div>
