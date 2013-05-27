@@ -15,6 +15,9 @@ body {
 	height: 529px;
 	background: #d89c69;
 }
+.active {
+		color: red;
+}
 
 .square {
 	box-shadow: 1px 3px 5px black;
@@ -103,4 +106,30 @@ body {
 
 .a {
 	position: absolute;
+}
+
+.buttons button {
+	display: block;
+}
+
+/* drag & drop */
+[draggable] {
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    -khtml-user-drag: element;
+    -webkit-user-drag: element;
+}
+.drop {}
+.drag { cursor: move; }
+.dragover {
+    padding: 9px;
+    background: #ededed;
+    border: 2px dashed #000;
+    border-radius: 10px;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+    opacity: .4;
 }

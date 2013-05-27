@@ -6,6 +6,7 @@ app.directive('tile', function() {
     restrict: 'E',
     replace: true,
     transclude: true,
+    scope: true,
     templateUrl: '/templates/square.html'
   }
 })
@@ -20,12 +21,67 @@ app.directive('tray', function() {
 	}
 });
 
+app.directive('dragtile', function () {
+  return {
+    restrict: 'A',
+    scope: {
+    	item: '=dragtile'
+    },
+    link: function (scope, elem, attr, ctrl) {
+      elem.prop('draggable', true);
+      elem.bind('dragstart', function(e) {
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text', angular.toJson(scope.tile));
+      });
+      elem.bind('dragleave', function (e) {});
+      elem.bind('dragend', function (e) {
+        e.preventDefault(); // firefox
+      	if (e.dataTransfer.dropEffect === 'move') {
+      		scope.removeTile(scope.$index);
+      		scope.$apply();
+      	}
+      });
+    }
+  };
+});
+
+app.directive('droptile', function () {
+  return {
+    scope: {
+      items: '=droptile'
+    },
+		controller: function($scope, $element, $attrs) {
+			$scope.placeTile = function(tile) {
+				$scope.tile = tile;
+				$scope.$apply(); // seems needed for async stuff
+			};
+		},
+    link: function (scope, elem, attr) {
+      elem.bind('drop', function (e) {
+        e.preventDefault(); // firefox
+        var data = angular.fromJson(e.dataTransfer.getData('text'));
+        scope.placeTile(data);
+        elem.addClass('played');
+        return false;
+      });
+      elem.bind('dragover', function (e) {
+          e.preventDefault();
+          return false;
+      });
+      elem.bind('dragleave', function (e) {});
+      elem.bind('dragenter', function (e) {});
+    }
+  };
+});
+
 // services to control the game
 app.factory('game', function() {
 	var game = {
 		player: 1,
 		isRunning: false,
-		numPlayers: 2
+		numPlayers: 2,
+    currentScore: 0,
+    scores: [0,0]
 	};
 	return {
 		end: function() {
@@ -44,37 +100,14 @@ app.factory('game', function() {
 });
 
 // service to control the bag
-app.service('bag', function() {
-	var letters = [];
-	var LETTERS = {
-		  a: {points: 1, count: 3}
-		, b: {points: 1, count: 3}
-		, c: {points: 1, count: 3}
-		, d: {points: 1, count: 3}
-		, e: {points: 1, count: 3}
-		, f: {points: 1, count: 3}
-		, g: {points: 1, count: 3}
-		, h: {points: 1, count: 3}
-		, i: {points: 1, count: 3}
-		, j: {points: 1, count: 1}
-		, k: {points: 1, count: 3}
-		, l: {points: 1, count: 3}
-		, m: {points: 1, count: 3}
-		, n: {points: 1, count: 3}
-		, o: {points: 1, count: 3}
-		, p: {points: 1, count: 3}
-		, q: {points: 1, count: 1}
-		, r: {points: 1, count: 3}
-		, s: {points: 1, count: 3}
-		, t: {points: 1, count: 3}
-		, u: {points: 1, count: 3}
-		, v: {points: 1, count: 3}
-		, w: {points: 1, count: 3}
-		, x: {points: 1, count: 1}
-		, y: {points: 1, count: 3}
-		, z: {points: 1, count: 1}
-    , '☠': {points: 100, count: 1}
-	};
+app.factory('bag', function() {
+	var letters = [], LETTERS = [];
+
+  // setup the letters
+  for (var i = 97; i <= 122; i++) {
+    LETTERS[String.fromCharCode(i)] = {points: Math.ceil(Math.random() * 10), count: 3};
+  }
+  LETTERS['☠'] = {points: 100, count: 1};
 
 	function getTiles(num) {
 		var tiles = [];
@@ -143,18 +176,7 @@ app.controller('BoardCtrl', function($scope) {
 	$scope.setTile = function(x, y, letter) {
 		$scope.tiles.splice(x * y - 1, 1, letter);
 	};
-	
-	$scope.place = function(tile) {
-		if (!tile) return;
-		if (tile.status === 'played') return;
-		var sel = $scope.selected[0];
- 		tile.letter = sel.letter;
- 		tile.number = sel.number;
- 		tile.status = 'played';
- 		$scope.selected[0] =  null; // remove selected tile
- 		// $scope.activeTray.tiles.splice($scope.activeIndex, 1); // remove from tray
-	};
-	
+
 	function getTiles() {
 		var middle = Math.floor(NUM_TILES / 2);
 		var tiles = [];
@@ -171,12 +193,13 @@ app.controller('BagCtrl', function($scope, bag) {
 	$scope.letters = bag.letters;
 	$scope.shuffle = function() {
 		bag.shuffle();
-	}
+	};
 });
 
 app.controller('TraysCtrl', function($scope, game, bag, trays) {
 
 	var TILES_PER_TRAY = 7;
+  var currentScore = 0;
 
 	$scope.trays = trays;
 
@@ -192,13 +215,13 @@ app.controller('TraysCtrl', function($scope, game, bag, trays) {
 		tray.tiles = tray.tiles.concat(tiles);
 	};
 
-	$scope.play = function() {
+	$scope.start = function() {
 		$scope.trays.forEach(function(tray) {
 			$scope.refill(tray);
 		});
 
 		// kinda weird
-		$scope.startGame();
+		$scope.$parent.start();
 	};
 
 	$scope.end = function() {
@@ -208,23 +231,24 @@ app.controller('TraysCtrl', function($scope, game, bag, trays) {
 		});
 
 		// kinda weird
-		$scope.endGame();
+		$scope.$parent.end();
 	};
 
-	function clearAll() {
-		$scope.trays[game.game.player - 1].tiles.forEach(function(tile) {
-			tile.selected = false;
-		});
-	};
-	
-	$scope.select = function(tile) {
-		clearAll();
-		tile.selected = !tile.selected;
-	};
+  $scope.next = function() {
+    $scope.refill($scope.trays[game.game.player - 1]);
+    game.game.scores[game.game.player - 1] += game.game.currentScore;
+    game.game.currentScore = 0;
 
-	$scope.fill = function($index) {
-		$scope.refill($scope.trays[$index]);
-	};
+    // kinda weird
+    $scope.$parent.next();
+  };
+
+  $scope.removeTile = function($index) {
+    // there's got to be an easier way to get here
+    var currentTile = $scope.trays[game.game.player - 1].tiles[$index];
+    game.game.currentScore += currentTile.number;
+    delete $scope.trays[game.game.player - 1].tiles.splice($index, 1);
+  };
 
 });
 
@@ -232,16 +256,17 @@ app.controller('GameCtrl', function($scope, game) {
 
 	// adding the service to the scope
 	$scope.game = game.game;
+  $scope.scores = game.game.scores;
 
 	$scope.next = function() {
 		game.next();
 	};
 
-	$scope.endGame = function() {
+	$scope.end = function() {
 		game.end();
 	};
 
-	$scope.startGame = function() {
+	$scope.start = function() {
 		game.start();
 	};
 

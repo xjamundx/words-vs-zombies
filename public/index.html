@@ -8,15 +8,11 @@
 	<body>
 		<div ng-controller="GameCtrl">
 			<div class="board" ng-controller="BoardCtrl">
-				<tile ng-repeat="tile in tiles" ng-click="place(tile)" />
+				<tile ng-repeat="tile in tiles" ng-click="place(tile)" droptile="tiles"/>
 			</div>
-			<p class="alert" ng-hide="game.isRunning">Press "Play" to start</p>
-			<p class="alert" ng-show="game.isRunning">Player {{game.player}}'s turn.</p>
+			<div ng-repeat="score in scores" class="alert" ng-show="game.isRunning" ng-class="{active: game.player==$index+1}">Player {{$index+1}}: {{score}}</div>
 			<div class="trays" ng-controller="TraysCtrl">
-				<div ng-repeat="tray in trays">
-						<button ng-click="refill(tray)">Refill Tray {{$index}}</button>
-				</div>
-				<tray ng-repeat="tray in trays" ng-click="fill($index)" />
+				<tray ng-repeat="tray in trays"></tray>
 			</div>
 			<div class="bag" ng-controller="BagCtrl">
 				<div>
@@ -25,15 +21,12 @@
 				</div>
 				<tile ng-repeat="tile in letters" />
 			</div>
-			<div>
-				<tile ng-repeat="tile in selected" ng-show="selected[0]" />
-			</div>
 			<div class="buttons" ng-controller="TraysCtrl">
-				<button ng-click="play();">Play</button>
-				<button ng-click="next()">Next Player</button>
-				<button ng-click="end()">End</button>
-				<button ng-click="shuffle()">Shuffle</button>
-			</div>
+				<button ng-click="start();" ng-hide="game.isRunning">Start</button>
+				<button ng-click="next()" ng-show="game.isRunning">Play</button>
+				<button ng-click="shuffle()" ng-show="game.isRunning">Shuffle</button>
+				<button ng-click="end()" ng-show="game.isRunning">End</button>
+				</div>
 		</div>
 		<script src="/js/angular.js"></script>
 		<script src="/js/board.js"></script>
