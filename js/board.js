@@ -7,7 +7,7 @@ app.directive('tile', function() {
     replace: true,
     transclude: true,
     scope: true,
-    templateUrl: '/templates/square.html'
+    templateUrl: 'templates/square.html'
   }
 })
 
@@ -17,7 +17,7 @@ app.directive('tray', function() {
     restrict: 'E',
     replace: true,
     transclude: true,
-    templateUrl: '/templates/tray.html'
+    templateUrl: 'templates/tray.html'
 	}
 });
 
